@@ -6,6 +6,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 
+//
 @Entity // 테이블 자동 매핑
 @AllArgsConstructor // 모든 필드에 대한 생성자 자동생성
 @NoArgsConstructor // 파라미터가 없는 기본 생성자 자동 생성
