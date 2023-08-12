@@ -1,2 +1,0 @@
-�17:47:41.102 [Test worker] INFO com.wanted.controller.UserController - [signUp] 회원가입을 수행합니다. email : test@test.com, password : ****
-�17:47:41.128 [Test worker] INFO com.wanted.controller.UserController - [signUp] 회원가입 결과: ApiResponseDto(success=false, message=User singUp fail, responseData=null)
