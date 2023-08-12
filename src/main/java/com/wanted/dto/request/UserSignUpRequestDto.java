@@ -5,7 +5,7 @@ import lombok.*;
 @Data
 @Builder
 @RequiredArgsConstructor
-public class UserSignupRequestDto {
+public class UserSignUpRequestDto {
     private final String email;
     private final String password;
 }
