@@ -1,7 +1,7 @@
 package com.wanted.controller;
 
-import com.wanted.dto.request.UserLoginRequestDto;
-import com.wanted.dto.request.UserSignupRequestDto;
+import com.wanted.dto.request.UserSignInRequestDto;
+import com.wanted.dto.request.UserSignUpRequestDto;
 import com.wanted.dto.response.ApiResponseDto;
 import com.wanted.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,7 +26,7 @@ public class UserController {
 
     @PostMapping("/signup")
     @Operation(summary = "회원가입")
-    public ResponseEntity<ApiResponseDto> signUp(@RequestBody UserSignupRequestDto userRequestDto){
+    public ResponseEntity<ApiResponseDto> signUp(@RequestBody UserSignUpRequestDto userRequestDto){
         LOGGER.info("[signUp] 회원가입을 수행합니다. email : {}, password : ****", userRequestDto.getEmail());
         ApiResponseDto apiResponseDto = userService.signUp(userRequestDto.getEmail(), userRequestDto.getPassword());
 
@@ -42,7 +42,7 @@ public class UserController {
 
     @PostMapping("/signin")
     @Operation(summary = "로그인")
-    public ResponseEntity<ApiResponseDto> signIn(@RequestBody UserLoginRequestDto userLoginDto){
+    public ResponseEntity<ApiResponseDto> signIn(@RequestBody UserSignInRequestDto userLoginDto){
         LOGGER.info("[signIn] 로그인을 시도합니다. id : {}, pw : ****", userLoginDto.getEmail());
         ApiResponseDto apiResponseDto = userService.signIn(userLoginDto.getEmail(), userLoginDto.getPassword());
 
