@@ -1,9 +1,10 @@
 package com.wanted.service;
 
+import com.wanted.dto.request.PostRequestDto;
 import com.wanted.dto.response.ApiResponseDto;
-import com.wanted.entity.Board;
+import com.wanted.entity.Post;
 import com.wanted.entity.User;
-import com.wanted.repository.BoardRepository;
+import com.wanted.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,15 +14,15 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class BoardService {
-    private final BoardRepository boardRepository;
-    private final Logger LOGGER = LoggerFactory.getLogger(BoardService.class);
+public class PostService {
+    private final PostRepository postRepository;
+    private final Logger LOGGER = LoggerFactory.getLogger(PostService.class);
 
 
-    // 과제 3. 새로운 게시글을 생성하는 엔드포인트
+
     public ApiResponseDto addPost(String title, String content, User user) {
         try {
-            Board post = boardRepository.save(Board.builder()
+            Post post = postRepository.save(Post.builder()
                     .title(title)
                     .content(content)
                     .user(user)
@@ -43,15 +44,14 @@ public class BoardService {
     }
 
 
-    // 과제 4. 게시글 목록을 조회하는 엔드포인트
-    // 반드시 Pagination 기능을 구현해 주세요.
+
     public ApiResponseDto listBoard() {
         try {
-            List<Board> boardList = boardRepository.findAll();
+            List<Post> postList = postRepository.findAll();
             return new ApiResponseDto(
                     true,
                     "BoardList successfully load",
-                    boardList
+                    postList
             );
         } catch (Exception e) {
             LOGGER.error("Error while load list: " + e.getMessage());
@@ -64,15 +64,14 @@ public class BoardService {
     }
 
 
-    // 과제 5. 특정 게시글을 조회하는 엔드포인트
-    // 게시글의 ID를 받아 해당 게시글을 조회하는 엔드포인트를 구현해 주세요.
+
     public ApiResponseDto detailPost(String postid) {
         try {
-            Board board = boardRepository.findById(Long.valueOf(postid)).orElseThrow();
+            Post post = postRepository.findById(Long.valueOf(postid)).orElseThrow();
             return new ApiResponseDto(
                     true,
                     "PostDetail successfully load",
-                    board
+                    post
             );
 
         } catch (Exception e) {
@@ -85,25 +84,70 @@ public class BoardService {
         }
     }
 
-    // 과제 6. 특정 게시글을 수정하는 엔드포인트
-    // 게시글의 ID와 수정 내용을 받아 해당 게시글을 수정하는 엔드포인트를 구현해 주세요.
-    // 게시글을 수정할 수 있는 사용자는 게시글 작성자만이어야 합니다.
-    public ApiResponseDto editPost(String postid) {
+
+    public ApiResponseDto editPost(String postid, PostRequestDto postRequestDto, User user) {
         try {
-            Board board = boardRepository.findById(Long.valueOf(postid)).orElseThrow();
-            
+            Post post = postRepository.findById(Long.valueOf(postid)).orElseThrow();
+
+            // 게시글을 수정할 수 있는 사용자는 게시글 작성자만이어야 합니다.
+            if (post.getUser().getId() != user.getId()) {
+                return new ApiResponseDto(
+                        false,
+                        "Unauthorized",
+                        null);
+            }
+
+            Post updatedPost = Post.builder()
+                    .id(post.getId())
+                    .title(postRequestDto.getTitle())
+                    .content(postRequestDto.getContent())
+                    .user(post.getUser())
+                    .build();
+
+            updatedPost = postRepository.save(updatedPost);
 
             return new ApiResponseDto(
                     true,
-                    "PostDetail successfully load",
-                    board
+                    "Post successfully edit",
+                    updatedPost
             );
 
         } catch (Exception e) {
-            LOGGER.error("Error while read Post: " + e.getMessage());
+            LOGGER.error("Error while edit Post: " + e.getMessage());
             return new ApiResponseDto(
                     false,
-                    "Failed to read Post: " + e.getMessage(),
+                    "Failed to edit Post: " + e.getMessage(),
+                    null
+            );
+        }
+    }
+
+
+    public ApiResponseDto deletePost(String postid, User user) {
+        try {
+            Post post = postRepository.findById(Long.valueOf(postid)).orElseThrow();
+
+            // 게시글을 삭제할 수 있는 사용자는 게시글 작성자만이어야 합니다.
+            if (post.getUser().getId() != user.getId()) {
+                return new ApiResponseDto(
+                        false,
+                        "Unauthorized",
+                        null);
+            }
+
+            postRepository.deleteById(Long.valueOf(postid));
+
+            return new ApiResponseDto(
+                    true,
+                    "Post successfully delete",
+                    null
+            );
+
+        } catch (Exception e) {
+            LOGGER.error("Error while delete Post: " + e.getMessage());
+            return new ApiResponseDto(
+                    false,
+                    "Failed to delete Post: " + e.getMessage(),
                     null
             );
         }
@@ -112,7 +156,5 @@ public class BoardService {
 
 
 
-    // 과제 7. 특정 게시글을 삭제하는 엔드포인트
-    // 게시글의 ID를 받아 해당 게시글을 삭제하는 엔드포인트를 구현해 주세요.
-    // 게시글을 삭제할 수 있는 사용자는 게시글 작성자만이어야 합니다.
+
 }
