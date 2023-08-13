@@ -8,7 +8,10 @@ import com.wanted.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 
@@ -45,13 +48,15 @@ public class PostService {
 
 
 
-    public ApiResponseDto listBoard() {
+    public ApiResponseDto listPost(int page, int size) {
         try {
-            List<Post> postList = postRepository.findAll();
+            Pageable pageable = PageRequest.of(page, size);
+
+            Page<Post> postListPageable = postRepository.findAll(pageable);
             return new ApiResponseDto(
                     true,
                     "BoardList successfully load",
-                    postList
+                    postListPageable
             );
         } catch (Exception e) {
             LOGGER.error("Error while load list: " + e.getMessage());

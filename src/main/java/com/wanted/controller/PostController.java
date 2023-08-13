@@ -50,9 +50,10 @@ public class PostController {
     @GetMapping("/list")
     @Operation(summary = "게시글 목록을 조회")
     // 페이지네이션 구현
-    public ResponseEntity<?> listBoard (){
+    public ResponseEntity<?> listPost (@RequestParam(defaultValue = "1") int page,
+                                        @RequestParam(defaultValue = "10") int size){
         
-        ApiResponseDto apiResponseDto = postService.listBoard();
+        ApiResponseDto apiResponseDto = postService.listPost(page, size);
 
         if (apiResponseDto.isSuccess()) {
             return new ResponseEntity<>(apiResponseDto, HttpStatus.OK);
