@@ -13,11 +13,11 @@ import javax.persistence.*;
 @ToString
 @Getter
 @Builder // Builder 패턴을 자동으로 생성
-@Table(name = "board") // 데이터베이스 테이블의 이름을 지정
+@Table(name = "post") // 데이터베이스 테이블의 이름을 지정
 // null 이 아닌 필드들을 기준으로 쿼리문 생성
 @DynamicInsert
 @DynamicUpdate
-public class Board {
+public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
