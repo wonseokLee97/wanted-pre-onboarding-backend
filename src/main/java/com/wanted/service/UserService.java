@@ -27,8 +27,10 @@ public class UserService {
     public ApiResponseDto signUp(String userEmail, String userPwd) {
         ApiResponseDto apiResponseDto;
 
-        // 유효성 검사 성공시에 회원가입을 진행한다.
-        if (isValidate(userEmail, userPwd)) {
+        try {
+            // 유효성 검사 성공시에 회원가입을 진행한다.
+            isValidate(userEmail, userPwd);
+
             userRepository.save(User.builder()
                     .email(userEmail)
                     .password(passwordEncoder.encode(userPwd))
@@ -39,11 +41,10 @@ public class UserService {
                     "User singUp success",
                     null
             );
-
-        } else {
+        } catch (Exception e) {
             apiResponseDto = new ApiResponseDto(
                     false,
-                    "User singUp fail",
+                    "User singUp fail: " + e.getMessage(),
                     null
             );
         }
@@ -96,12 +97,11 @@ public class UserService {
 
 
 
-    boolean isValidate(String userEmail, String userPwd) {
+    void isValidate(String userEmail, String userPwd) {
         // 이메일 조건: @ 포함
         // 비밀번호 조건: 8자 이상
-        if (userEmail.contains("@") && userPwd.length() >= 8) {
-            return true;
+        if (!userEmail.contains("@") || userPwd.length() < 8) {
+            throw new IllegalArgumentException("Invalid email or password");
         }
-        return false;
     }
 }
