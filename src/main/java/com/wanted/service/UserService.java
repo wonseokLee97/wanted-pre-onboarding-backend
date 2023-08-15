@@ -1,11 +1,14 @@
 package com.wanted.service;
 
+import com.wanted.controller.UserController;
 import com.wanted.dto.response.ApiResponseDto;
 import com.wanted.dto.response.UserSignInResponseDto;
 import com.wanted.entity.User;
 import com.wanted.repository.UserRepository;
 import com.wanted.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +19,8 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
+    private final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
+
 
     // 과제 1. 사용자 회원가입 엔드포인트
     // 이메일과 비밀번호로 회원가입할 수 있는 엔드포인트를 구현해 주세요.

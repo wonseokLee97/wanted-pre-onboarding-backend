@@ -27,7 +27,7 @@ public class PostService {
 
     public ApiResponseDto addPost(String title, String content, User user) {
         try {
-            Post post = postRepository.save(Post.builder()
+            postRepository.save(Post.builder()
                     .title(title)
                     .content(content)
                     .user(user)
@@ -36,7 +36,10 @@ public class PostService {
             return new ApiResponseDto(
                     true,
                     "Post successfully added",
-                    post
+                    PostRequestDto.builder()
+                            .title(title)
+                            .content(content)
+                            .build()
             );
         } catch (Exception e) {
             LOGGER.error("Error while adding post: " + e.getMessage());
@@ -89,7 +92,10 @@ public class PostService {
             return new ApiResponseDto(
                     true,
                     "PostDetail successfully load",
-                    post.toString()
+                    PostRequestDto.builder()
+                            .title(post.getTitle())
+                            .content(post.getContent())
+                            .build()
             );
 
         } catch (Exception e) {
@@ -123,14 +129,15 @@ public class PostService {
                     .user(post.getUser())
                     .build();
 
-
             updatedPost = postRepository.save(updatedPost);
-
 
             return new ApiResponseDto(
                     true,
                     "Post successfully edit",
-                    post.toString()
+                    PostRequestDto.builder()
+                            .title(updatedPost.getTitle())
+                            .content(updatedPost.getContent())
+                            .build()
             );
 
         } catch (Exception e) {
@@ -173,9 +180,4 @@ public class PostService {
             );
         }
     }
-
-
-
-
-
 }
