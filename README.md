@@ -10,6 +10,16 @@
 
 ## 애플리케이션의 실행 방법 (엔드포인트 호출 방법 포함)
 ![swagger docs](images/swagger_docs.png)
+Main class인 BackendApplication을 통해 빌드를 시작하여 어플리케이션을 실행합니다. 기본 로컬환경의 8080 port를 사용하며, Database는 MySQL 8.0 버전의 기본 포트 3306을 사용합니다. 엔드포인트 호출 방법으로는 PostMan을 사용하는 방법과 Swagger-docs를 사용하는 방법이 있습니다.
+본 과제에서는 Swagger-docs를 사용하였습니다.
+
+<br/>
+
+#### Swagger-docs
+1. http://localhost:8080/api/swagger-ui/index.html? URL에 접속.
+2. 검색창에 /api/ 를 입력한 뒤에 explore를 클릭.
+3. 엔드포인트 호출
+
 <br/><br/><br/>
 
 ## 데이터베이스 테이블 구조
