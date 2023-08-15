@@ -2,6 +2,7 @@ package com.wanted.service;
 
 import com.wanted.dto.request.PostRequestDto;
 import com.wanted.dto.response.ApiResponseDto;
+import com.wanted.dto.response.PostResponseDto;
 import com.wanted.entity.Post;
 import com.wanted.entity.User;
 import com.wanted.repository.PostRepository;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -50,13 +52,23 @@ public class PostService {
 
     public ApiResponseDto listPost(int page, int size) {
         try {
-            Pageable pageable = PageRequest.of(page, size);
+            List<PostResponseDto> list = new ArrayList<>();
 
+            Pageable pageable = PageRequest.of(page, size);
             Page<Post> postListPageable = postRepository.findAll(pageable);
+
+            for (Post post : postListPageable.getContent()) {
+                list.add(PostResponseDto.builder()
+                        .id(post.getId())
+                        .title(post.getTitle())
+                        .content(post.getContent())
+                        .build());
+            }
+
             return new ApiResponseDto(
                     true,
-                    "BoardList successfully load",
-                    postListPageable
+                    "PostList successfully load",
+                    list
             );
         } catch (Exception e) {
             LOGGER.error("Error while load list: " + e.getMessage());
@@ -73,10 +85,11 @@ public class PostService {
     public ApiResponseDto detailPost(String postid) {
         try {
             Post post = postRepository.findById(Long.valueOf(postid)).orElseThrow();
+
             return new ApiResponseDto(
                     true,
                     "PostDetail successfully load",
-                    post
+                    post.toString()
             );
 
         } catch (Exception e) {
@@ -102,6 +115,7 @@ public class PostService {
                         null);
             }
 
+
             Post updatedPost = Post.builder()
                     .id(post.getId())
                     .title(postRequestDto.getTitle())
@@ -109,12 +123,14 @@ public class PostService {
                     .user(post.getUser())
                     .build();
 
+
             updatedPost = postRepository.save(updatedPost);
+
 
             return new ApiResponseDto(
                     true,
                     "Post successfully edit",
-                    updatedPost
+                    post.toString()
             );
 
         } catch (Exception e) {
