@@ -50,7 +50,7 @@ public class PostController {
     @GetMapping("/list")
     @Operation(summary = "게시글 목록을 조회")
     // 페이지네이션 구현
-    public ResponseEntity<?> listPost (@RequestParam(defaultValue = "1") int page,
+    public ResponseEntity<?> listPost (@RequestParam(defaultValue = "0") int page,
                                         @RequestParam(defaultValue = "10") int size){
         
         ApiResponseDto apiResponseDto = postService.listPost(page, size);
@@ -94,6 +94,7 @@ public class PostController {
             return new ResponseEntity<>(apiResponseDto, HttpStatus.FORBIDDEN);
         }
 
+
         if (apiResponseDto.isSuccess()) {
             return new ResponseEntity<>(apiResponseDto, HttpStatus.OK);
         } else {
@@ -105,7 +106,7 @@ public class PostController {
 
     // 과제 7. 특정 게시글을 삭제하는 엔드포인트
     // 게시글의 ID를 받아 해당 게시글을 삭제하는 엔드포인트를 구현해 주세요.
-    @DeleteMapping("/postid")
+    @DeleteMapping("/{postid}")
     @Operation(summary = "게시글 삭제")
     public ResponseEntity<?> deletePost (@PathVariable String postid,
                                          @Parameter(hidden = true)
