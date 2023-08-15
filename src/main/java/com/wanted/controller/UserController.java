@@ -26,9 +26,10 @@ public class UserController {
 
     @PostMapping("/signup")
     @Operation(summary = "회원가입")
-    public ResponseEntity<ApiResponseDto> signUp(@RequestBody UserSignUpRequestDto userRequestDto){
+    public ResponseEntity<?> signUp(@RequestBody UserSignUpRequestDto userRequestDto){
         LOGGER.info("[signUp] 회원가입을 수행합니다. email : {}, password : ****", userRequestDto.getEmail());
         ApiResponseDto apiResponseDto = userService.signUp(userRequestDto.getEmail(), userRequestDto.getPassword());
+        LOGGER.info("{}", apiResponseDto);
 
         // 회원가입에 성공한경우
         if (apiResponseDto.isSuccess()) {
@@ -42,7 +43,7 @@ public class UserController {
 
     @PostMapping("/signin")
     @Operation(summary = "로그인")
-    public ResponseEntity<ApiResponseDto> signIn(@RequestBody UserSignInRequestDto userLoginDto){
+    public ResponseEntity<?> signIn(@RequestBody UserSignInRequestDto userLoginDto){
         LOGGER.info("[signIn] 로그인을 시도합니다. id : {}, pw : ****", userLoginDto.getEmail());
         ApiResponseDto apiResponseDto = userService.signIn(userLoginDto.getEmail(), userLoginDto.getPassword());
 

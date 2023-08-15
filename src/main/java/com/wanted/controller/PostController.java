@@ -13,9 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "Board", description = "게시판 관련 API")
+@Tag(name = "Post", description = "게시판 관련 API")
 @RestController
-@RequestMapping("/board")
+@RequestMapping("/post")
 @RequiredArgsConstructor
 public class PostController {
 
